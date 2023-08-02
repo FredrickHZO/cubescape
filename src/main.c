@@ -1,4 +1,4 @@
-#include "raylib.h"
+#include <raylib.h>
 
 const int SCREEN_WIDTH = 450;
 const int SCREEN_HEIGHT = 800; 
@@ -10,7 +10,6 @@ int main(void) {
     while (!WindowShouldClose()) {
         BeginDrawing();
             ClearBackground(RAYWHITE);
-            DrawText("lol", 100, 100, 3, LIGHTGRAY);
         EndDrawing();
     }
 
