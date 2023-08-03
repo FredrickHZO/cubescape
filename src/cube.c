@@ -1,11 +1,13 @@
 #include "cube.h"
 
+const float SPEED = 10.0f;
+
 void move_cube_right(Vector3* pos) {
-    pos->z += 1.0f;
+    pos->z += SPEED * GetFrameTime();
 }
 
 void move_cube_left(Vector3* pos) {
-    pos->z -= 1.0f;
+    pos->z -= SPEED * GetFrameTime();
 }
 
 void cube_move(Vector3* pos) {
