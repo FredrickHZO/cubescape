@@ -33,6 +33,7 @@ void change_plane_position(game* g) {
 // TODO: replace it with something that is actually good and reliable
 void run(game g) {
     int cycles = 0;
+
     while (!WindowShouldClose()) {
         manage_camera_zoom(&g.camera);
         cube_move(&g.player);
@@ -56,8 +57,9 @@ void run(game g) {
                 }
                 draw_cube(g.player);
                 draw_plane(g);
-                cycles += 1;
             EndMode3D();
         EndDrawing();
+
+        cycles++;
     }
 }
