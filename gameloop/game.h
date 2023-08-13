@@ -1,6 +1,7 @@
 #pragma once
 #include "../game_elements/cube.h"
 #include "../game_elements/camera.h"
+#include "../game_elements/plane.h"
 #include "../utility/list.h"
 
 typedef struct plane {
@@ -23,4 +24,3 @@ typedef struct game {
 
 game new_game();
 void run(game g);
-plane init_terrain();
