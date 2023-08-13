@@ -1,4 +1,5 @@
 #include "camera.h"
+#include "cube.h"
 
 const float MAX_FOV = 150.0f;
 const float MIN_FOV = 80.0f;
@@ -6,8 +7,10 @@ const float DEF_FOV = 100.0f;
 
 const float CAMERA_X_POS = 2.0f;
 const float CAMERA_Y_POS = 2.5f;
+const float PLAYER_DISTANCE = 3.0f;
+const float TARGET_DISTANCE = 2.0f;
 
-Camera3D init_camera() {
+Camera3D init_follow_camera() {
     return (Camera3D) {
         .position   = (Vector3){ CAMERA_X_POS, CAMERA_Y_POS, 0 },
         .target     = (Vector3){0},
@@ -30,7 +33,7 @@ void manage_camera_zoom(Camera3D* camera) {
     if (IsKeyDown(KEY_J)) cam_zoom_in(camera);
 }
 
-void follow_player_cam(Camera3D* camera, Vector3* p_pos) {
-    camera->target.x = p_pos->x - 2.0f;
-    camera->position.x = CAMERA_X_POS + p_pos->x;
+void follow_player_cam(Camera3D* camera, cube c) {
+    camera->target.x = c.pos.x + TARGET_DISTANCE;
+    camera->position.x = c.pos.x - PLAYER_DISTANCE;
 } 
