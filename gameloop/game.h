@@ -1,13 +1,8 @@
 #pragma once
-#include "cube.h"
-#include "camera.h"
-#include "list.h"
-
-typedef struct plane {
-    Vector3 pos;
-    Vector2 size;
-    Color color;
-} plane;
+#include "../game_elements/cube.h"
+#include "../game_elements/camera.h"
+#include "../game_elements/plane.h"
+#include "../utility/list.h"
 
 typedef struct game {
     cube player;
@@ -23,4 +18,3 @@ typedef struct game {
 
 game new_game();
 void run(game g);
-plane init_terrain();
