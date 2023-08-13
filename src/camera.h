@@ -1,6 +1,7 @@
 #pragma once
 #include <raylib.h>
+#include "cube.h"
 
-Camera3D init_camera();
+Camera3D init_follow_camera();
 void manage_camera_zoom(Camera3D* camera);
-void follow_player_cam(Camera3D* camera, Vector3* p_pos);
+void follow_player_cam(Camera3D* camera, cube c);
