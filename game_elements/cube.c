@@ -50,10 +50,7 @@ cube spawn_enemy(cube player) {
         .pos = (Vector3){
             player.pos.x + EN_DIST_PLAYER,
             0.5f,
-            GetRandomValue(
-                -SPAWN_OFFSET,
-                SPAWN_OFFSET
-            )
+            GetRandomValue(-SPAWN_OFFSET, SPAWN_OFFSET)
         },
         .size = (Vector3){
             player.size.x,

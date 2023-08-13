@@ -1,4 +1,4 @@
-#include "game.h"
+#include "gameloop/game.h"
 
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720; 
