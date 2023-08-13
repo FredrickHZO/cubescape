@@ -1,7 +1,7 @@
 #pragma once
-#include "cube.h"
-#include "camera.h"
-#include "list.h"
+#include "../game_elements/cube.h"
+#include "../game_elements/camera.h"
+#include "../utility/list.h"
 
 typedef struct plane {
     Vector3 pos;
