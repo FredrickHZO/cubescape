@@ -4,12 +4,6 @@
 #include "../game_elements/plane.h"
 #include "../utility/list.h"
 
-typedef struct plane {
-    Vector3 pos;
-    Vector2 size;
-    Color color;
-} plane;
-
 typedef struct game {
     cube player;
     Camera3D camera;
