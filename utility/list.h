@@ -1,6 +1,6 @@
 #pragma once
 #include <stdlib.h>
-#include "../game_elements/cube.h"
+#include <cube.h>
 
 typedef struct list {
     cube* arr;
