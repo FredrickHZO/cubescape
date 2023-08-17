@@ -8,9 +8,12 @@ typedef struct cube {
     BoundingBox collision;
 } cube;
 
-cube init_cube();
-cube spawn_enemy(cube player); 
+cube init_plane();
+void draw_plane(cube p);
+void update_plane_position(cube player, cube* plane);
+cube init_player();
+cube create_obstacle(cube player); 
 void draw_cube(cube c); 
-void cube_move(cube* c);
-int should_enemy_spawn(cube player, int cycles);
-int should_enemy_despawn(cube player, cube enemy);
+void player_move(cube* c);
+int should_obst_spawn(cube player, int cycles);
+int should_obst_despawn(cube player, cube enemy);
