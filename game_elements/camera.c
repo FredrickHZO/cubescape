@@ -1,5 +1,4 @@
 #include "camera.h"
-#include "cube.h"
 
 const float MAX_FOV = 150.0f;
 const float MIN_FOV = 80.0f;
