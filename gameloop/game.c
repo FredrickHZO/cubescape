@@ -10,14 +10,14 @@ struct game new_game() {
     };
 }
 
-inline void update_game_state(struct game* g) {
+static inline void update_game_state(struct game* g) {
         manage_camera_zoom(&g->camera);
         player_move(&g->player);
         follow_player_cam(&g->camera, g->player);
         update_plane_position(g->player, &g->terrain);
 }
 
-inline void render_3D_scene(struct game* g) {
+static inline void render_3D_scene(struct game* g) {
     BeginMode3D(g->camera);
     if (g->obstacles.elements > 0) {
         for (int i = 0; i < g->obstacles.elements; i++) {
