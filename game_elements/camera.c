@@ -32,7 +32,7 @@ void manage_camera_zoom(Camera3D* camera) {
     if (IsKeyDown(KEY_J)) cam_zoom_in(camera);
 }
 
-void follow_player_cam(Camera3D* camera, cube c) {
+void follow_player_cam(Camera3D* camera, struct cube c) {
     camera->target.x = c.pos.x + TARGET_DISTANCE;
     camera->position.x = c.pos.x - PLAYER_DISTANCE;
 } 
