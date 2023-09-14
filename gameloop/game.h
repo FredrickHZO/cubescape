@@ -3,16 +3,16 @@
 #include <camera.h>
 #include <list.h>
 
-typedef struct game {
-    cube player;
+struct game {
+    struct cube player;
     Camera3D camera;
-    cube obstacle;
+    struct cube obstacle;
     list obstacles;
-    cube terrain;
+    struct cube terrain;
     int lives;
     float points;
-} game;
+};
 
 
-game new_game();
-void run(game g);
+struct game new_game();
+void run(struct game g);
