@@ -7,7 +7,7 @@ int main(void) {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Cubescape");
     SetTargetFPS(60);
 
-        game cubescape = new_game();
+        struct game cubescape = new_game();
         run(cubescape);
 
     CloseWindow();

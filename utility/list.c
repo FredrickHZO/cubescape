@@ -4,22 +4,22 @@ list new_list() {
     list l = {
         .elements = 0,
         .size     = 10,
-        .arr      = (cube*) malloc(sizeof(cube) * l.size)
+        .arr      = (struct cube*) malloc(sizeof(struct cube) * l.size)
     };
     return l;
 }
 
 void list_double(list* a) {
-    cube* tmp;
+    struct cube* tmp;
     a->size *= 2;
-    tmp = (cube*) malloc(sizeof(cube) * a->size);
+    tmp = (struct cube*) malloc(sizeof(struct cube) * a->size);
     for (int i = 0; i < a->elements; i++) {
        tmp[i] = a->arr[i];
     }
     a->arr = tmp; 
 }
 
-void insert_element(list* a, cube c) {
+void insert_element(list* a, struct cube c) {
     if (a->elements == a->size-1) {
         list_double(a);
     }

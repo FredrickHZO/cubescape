@@ -3,11 +3,11 @@
 #include <cube.h>
 
 typedef struct list {
-    cube* arr;
+    struct cube* arr;
     int size;
     int elements;
 } list;
 
 list new_list();
-void insert_element(list* a, cube c);
+void insert_element(list* a, struct cube c);
 void delete_element(list* l);
