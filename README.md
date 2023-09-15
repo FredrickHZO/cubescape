@@ -12,7 +12,7 @@ A 3D cube run mini game made with Raylib library
 - ~~Lives system~~
 - End game when there are no more lives available
 
-Collision and boundaries detection can use a lot of more love, but for now they're working, they're not perfect by any means, but _for now_ they will do.
+Collision and boundaries detection can use a lot of more love, but they're somewhat working, they're not perfect by any means, but _for now_ they will do.
 
 <img src="https://github.com/FredrickHZO/cubescape/blob/main/screenshots/cubescape-0.png"  width="600" height="300">
 
