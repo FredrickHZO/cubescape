@@ -6,11 +6,13 @@ A 3D cube run mini game made with Raylib library
 - ~~Follow camera~~
 - ~~Endless terrain generation~~
 - ~~Obstacle spawn~~
-- Collision detection
-- Player movement only inside terrain boundaries
+- ~~Collision detection~~
+- ~~Player movement only inside terrain boundaries~~
 - Points system
-- Lives system
+- ~~Lives system~~
 - End game when there are no more lives available
+
+Collision and boundaries detection can use a lot of more love, but for now they're working, they're not perfect by any means, but _for now_ they will do.
 
 <img src="https://github.com/FredrickHZO/cubescape/blob/main/screenshots/cubescape-0.png"  width="600" height="300">
 
