@@ -1,4 +1,5 @@
 #include "game.h"
+#include <math.h>
 
 struct game new_game() {
     return (struct game) {
@@ -10,11 +11,30 @@ struct game new_game() {
     };
 }
 
+// bounding boxes forced my hand, collision aren't detected well unless i do this terribleness
+static inline void update_enemy_hitboxes(struct game* g) {
+    for (int i = 0; i < g->obstacles.elements; i++) {
+        g->obstacles.arr[i].hitbox = (BoundingBox) {
+            (Vector3) {
+                g->obstacles.arr[i].pos.x - (g->obstacles.arr[i].size.x / 2),
+                g->obstacles.arr[i].pos.y - (g->obstacles.arr[i].size.y / 2),
+                g->obstacles.arr[i].pos.z - (g->obstacles.arr[i].size.z / 2)
+            },
+            (Vector3) {
+                g->obstacles.arr[i].pos.x + (g->obstacles.arr[i].size.x / 2),
+                g->obstacles.arr[i].pos.y + (g->obstacles.arr[i].size.y / 2),
+                g->obstacles.arr[i].pos.z + (g->obstacles.arr[i].size.z / 2)
+            },
+        };
+    }
+}
+
 static inline void update_game_state(struct game* g) {
         manage_camera_zoom(&g->camera);
         player_move(&g->player);
         follow_player_cam(&g->camera, g->player);
         update_plane_position(g->player, &g->terrain);
+        update_enemy_hitboxes(g);
 }
 
 static inline void render_3D_scene(struct game* g) {
@@ -27,6 +47,14 @@ static inline void render_3D_scene(struct game* g) {
     draw_plane(g->terrain);
     draw_cube(g->player);
     EndMode3D();
+}
+
+static inline void check_collisions(struct game* g) {
+    if (CheckCollisionBoxes(g->player.hitbox, g->obstacles.arr[0].hitbox)
+        && g->obstacles.arr[0].collided == false) {
+            g->obstacles.arr[0].collided = true;
+            g->lives--;
+    }
 }
 
 void run(struct game g) {
@@ -42,10 +70,12 @@ void run(struct game g) {
             delete_element(&g.obstacles);
         }
 
+        check_collisions(&g);
+
         // draw on the screen
         BeginDrawing();
             ClearBackground(BEIGE);
-            DrawText(TextFormat("z := %f", g.obstacles.arr[0].pos.z), 20, 20, 20, BLACK);
+            DrawText(TextFormat("LIVES := %d", g.lives), 20, 20, 20, BLACK);
             render_3D_scene(&g);
         EndDrawing();
     }
