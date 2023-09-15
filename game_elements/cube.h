@@ -4,8 +4,9 @@
 struct cube {
     Vector3 pos;
     Vector3 size;
-    Color col;
-    BoundingBox collision;
+    Color color;
+    BoundingBox hitbox;
+    bool collided;
 };
 
 struct cube init_plane();
