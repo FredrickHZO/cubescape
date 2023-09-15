@@ -6,7 +6,7 @@ const float DEF_FOV = 100.0f;
 
 const float CAMERA_X_POS = 2.0f;
 const float CAMERA_Y_POS = 2.5f;
-const float PLAYER_DISTANCE = 3.0f;
+const float PLAYER_DISTANCE = 2.0f;
 const float TARGET_DISTANCE = 2.0f;
 
 Camera3D init_follow_camera() {
