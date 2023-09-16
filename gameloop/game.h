@@ -15,4 +15,4 @@ struct game {
 
 
 struct game new_game();
-void run(struct game g);
+void run(struct game* g);
