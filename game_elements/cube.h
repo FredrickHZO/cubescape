@@ -5,7 +5,6 @@ struct cube {
     Vector3 pos;
     Vector3 size;
     Color color;
-    BoundingBox hitbox;
     bool collided;
 };
 
