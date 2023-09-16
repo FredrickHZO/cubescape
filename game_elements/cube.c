@@ -3,24 +3,25 @@
 
 const float LATERAL_SPEED = 10.0f;
 const float SPEED         = 20.0f;
+const float P_SIZE        = 0.5f;
 
 const float DIST_FROM_PLAYER = 100.0f;
 const float DESPAWN_DIST     = 1.5f;
-const int SPAWN_CYCLES       = 35;
-const int MIN_SIZE           = 1;
-const int MAX_SIZE           = 3;
+const int SPAWN_CYCLES       = 30;
+const float MIN_SIZE           = 1;
+const float MAX_SIZE           = 3.5;
 
-const float TERRAIN_ELEVATION = -0.25f; // -0.25
+const float TERRAIN_ELEVATION = -0.25f;
 const float TERRAIN_LENGTH    = 900.0f;
-const float TERRAIN_WIDTH     = 5.0f; // 5
+const float TERRAIN_WIDTH     = 5.0f;
 
-const int AVAILABLE_COLORS = 9;
+const int AVAILABLE_COLORS = 8;
 const Color colors[] = {
-    WHITE,   BLACK,
-    GREEN,   BLUE, 
+    WHITE, GREEN,
     MAGENTA, VIOLET,
     PURPLE,  ORANGE,
-    GOLD,    PINK
+    GOLD,    PINK,
+    BLUE
 };
 
 // terrain related code
@@ -52,8 +53,8 @@ void update_plane_position(struct cube player, struct cube* plane) {
 // player related code
 struct cube init_player() {
     return (struct cube) {
-        .pos  = (Vector3){0, 0.25f, 0}, // 0.25
-        .size = (Vector3){0.5f, 0.5f, 0.5f}, // .05
+        .pos  = (Vector3){0, TERRAIN_ELEVATION + P_SIZE, 0},
+        .size = (Vector3){P_SIZE, P_SIZE, P_SIZE},
         .color  = YELLOW
     };
 }
@@ -112,8 +113,8 @@ int should_obst_despawn(struct cube player, struct cube enemy) {
 
 // spawn an enemy with a random position and size
 struct cube create_obstacle(struct cube player) {
-    int z_size = GetRandomValue(MIN_SIZE, MAX_SIZE);
-    float z_pos = (TERRAIN_WIDTH / 2) - ((float)z_size / 2);
+    float z_size = random_float(MIN_SIZE, MAX_SIZE);
+    float z_pos = (TERRAIN_WIDTH / 2) - (z_size / 2);
 
     float obst_x_pos = player.pos.x + DIST_FROM_PLAYER;
     float random_z = random_float(-z_pos, z_pos);
