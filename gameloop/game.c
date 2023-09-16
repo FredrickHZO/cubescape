@@ -1,5 +1,5 @@
 #include "game.h"
-#include <math.h>
+#include "raymath.h"
 
 struct game new_game() {
     return (struct game) {
@@ -11,30 +11,10 @@ struct game new_game() {
     };
 }
 
-// bounding boxes forced my hand, collision aren't detected well unless i do this terribleness
-static inline void update_enemy_hitboxes(struct game* g) {
-    for (int i = 0; i < g->obstacles.elements; i++) {
-        g->obstacles.arr[i].hitbox = (BoundingBox) {
-            (Vector3) {
-                g->obstacles.arr[i].pos.x - (g->obstacles.arr[i].size.x / 2),
-                g->obstacles.arr[i].pos.y - (g->obstacles.arr[i].size.y / 2),
-                g->obstacles.arr[i].pos.z - (g->obstacles.arr[i].size.z / 2)
-            },
-            (Vector3) {
-                g->obstacles.arr[i].pos.x + (g->obstacles.arr[i].size.x / 2),
-                g->obstacles.arr[i].pos.y + (g->obstacles.arr[i].size.y / 2),
-                g->obstacles.arr[i].pos.z + (g->obstacles.arr[i].size.z / 2)
-            },
-        };
-    }
-}
-
 static inline void update_game_state(struct game* g) {
-        manage_camera_zoom(&g->camera);
         player_move(&g->player);
         follow_player_cam(&g->camera, g->player);
         update_plane_position(g->player, &g->terrain);
-        update_enemy_hitboxes(g);
 }
 
 static inline void render_3D_scene(struct game* g) {
@@ -50,33 +30,82 @@ static inline void render_3D_scene(struct game* g) {
 }
 
 static inline void check_collisions(struct game* g) {
-    if (CheckCollisionBoxes(g->player.hitbox, g->obstacles.arr[0].hitbox)
-        && g->obstacles.arr[0].collided == false) {
+        if (g->obstacles.elements == 0) {
+            return;
+        }
+
+        if (CheckCollisionBoxes(
+            (BoundingBox){
+                (Vector3) {
+                g->player.pos.x - g->player.size.x / 2,
+                g->player.pos.y - g->player.size.y / 2,
+                g->player.pos.z - g->player.size.z / 2,
+                },
+                (Vector3) {
+                g->player.pos.x + g->player.size.x / 2,
+                g->player.pos.y + g->player.size.y / 2,
+                g->player.pos.z + g->player.size.z / 2,
+                },
+            },
+            (BoundingBox) {
+                (Vector3) {
+                g->obstacles.arr[0].pos.x - g->obstacles.arr[0].size.x / 2,
+                g->obstacles.arr[0].pos.y - g->obstacles.arr[0].size.y / 2,
+                g->obstacles.arr[0].pos.z - g->obstacles.arr[0].size.z / 2,
+                },
+                (Vector3) {
+                g->obstacles.arr[0].pos.x + g->obstacles.arr[0].size.x / 2,
+                g->obstacles.arr[0].pos.y + g->obstacles.arr[0].size.y / 2,
+                g->obstacles.arr[0].pos.z + g->obstacles.arr[0].size.z / 2,
+                }
+            }
+        ) && g->obstacles.arr[0].collided == false) {
+            g->obstacles.arr[0].color = BLACK;
             g->obstacles.arr[0].collided = true;
             g->lives--;
+        }
+}
+
+static inline void manage_obstacles(struct game* g, int cycles) {
+    if (should_obst_spawn(g->player, cycles)) {
+        insert_element(&g->obstacles, create_obstacle(g->player));
+    }
+    if (should_obst_despawn(g->player, g->obstacles.arr[0])) {
+        delete_element(&g->obstacles);
     }
 }
 
-void run(struct game g) {
+static inline void reset_game(struct game* g) {
+    g->player = init_player();
+    g->camera = init_follow_camera();
+    g->obstacles = new_list();
+    g->terrain = init_plane();
+    g->lives = 3;
+}
+
+void run(struct game* g) {
     for (int cycles = 0; !WindowShouldClose(); cycles++) {
         // update game values
-        update_game_state(&g);
-
-        if (should_obst_spawn(g.player, cycles)) {
-            struct cube obstacle = create_obstacle(g.player);
-            insert_element(&g.obstacles, obstacle);
-        }
-        if (should_obst_despawn(g.player, g.obstacles.arr[0])) {
-            delete_element(&g.obstacles);
+        if (g->lives > 0) {
+            update_game_state(g);
+            manage_obstacles(g, cycles);
         }
 
-        check_collisions(&g);
+        check_collisions(g);
 
         // draw on the screen
         BeginDrawing();
             ClearBackground(BEIGE);
-            DrawText(TextFormat("LIVES := %d", g.lives), 20, 20, 20, BLACK);
-            render_3D_scene(&g);
+            if (g->lives > 0)
+                DrawText(TextFormat("LIVES := %d", g->lives), 20, 20, 20, BLACK);
+            else {
+                DrawText("Press R to try again", 20, 20, 20, BLACK);
+                if (IsKeyDown(KEY_R)) {
+                    reset_game(g);
+                    cycles = 0;
+                }
+            }
+            render_3D_scene(g);
         EndDrawing();
     }
 }
