@@ -8,7 +8,7 @@ int main(void) {
     SetTargetFPS(60);
 
         struct game cubescape = new_game();
-        run(cubescape);
+        run(&cubescape);
 
     CloseWindow();
 }
