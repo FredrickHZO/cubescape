@@ -7,12 +7,12 @@ const float SPEED         = 20.0f;
 const float DIST_FROM_PLAYER = 100.0f;
 const float DESPAWN_DIST     = 1.5f;
 const int SPAWN_CYCLES       = 35;
-const int MIN_SIZE           = 2;
-const int MAX_SIZE           = 5;
+const int MIN_SIZE           = 1;
+const int MAX_SIZE           = 3;
 
-const float TERRAIN_ELEVATION = -0.5f;
+const float TERRAIN_ELEVATION = -0.25f; // -0.25
 const float TERRAIN_LENGTH    = 900.0f;
-const float TERRAIN_WIDTH     = 10.0f;
+const float TERRAIN_WIDTH     = 5.0f; // 5
 
 const int AVAILABLE_COLORS = 9;
 const Color colors[] = {
@@ -52,13 +52,9 @@ void update_plane_position(struct cube player, struct cube* plane) {
 // player related code
 struct cube init_player() {
     return (struct cube) {
-        .pos  = (Vector3){0, 0.5f, 0},
-        .size = (Vector3){1.0f, 1.0f, 1.0f},
-        .color  = YELLOW,
-        .hitbox = (BoundingBox) {
-            (Vector3){-0.5f, 0.25f, -0.5f},
-            (Vector3){0.5f, 0.75f, 0.5f}
-        }
+        .pos  = (Vector3){0, 0.25f, 0}, // 0.25
+        .size = (Vector3){0.5f, 0.5f, 0.5f}, // .05
+        .color  = YELLOW
     };
 }
 
@@ -71,33 +67,27 @@ void draw_cube(struct cube c) {
 // makes the cube go right
 void move_player_right(struct cube* c) {
     c->pos.z += LATERAL_SPEED * GetFrameTime();
-    c->hitbox.max.z = c->pos.z + (c->size.z / 2);
-    c->hitbox.min.z = c->pos.z - (c->size.z / 2);
 }
 
 // makes the cube go left
 void move_player_left(struct cube* c) {
     c->pos.z -= LATERAL_SPEED * GetFrameTime();
-    c->hitbox.max.z = c->pos.z + (c->size.z / 2);
-    c->hitbox.min.z = c->pos.z - (c->size.z / 2);
 }
 
 // automagically moves the cube forward and checks for
 // lateral movement input from the player
 void player_move(struct cube* c) {
     c->pos.x += SPEED * GetFrameTime();
-    c->hitbox.max.x = c->pos.x + (c->size.x);
-    c->hitbox.min.x = c->pos.x - (c->size.x / 2);
 
     float target_pos = (TERRAIN_WIDTH / 2) - c->size.z;
     // TODO: find a way to fix the boundaries control and not use
     // hard-coded random values
     if (IsKeyDown(KEY_A)) {
-        if (c->pos.z > -target_pos + 0.4f)
+        if (c->pos.z > -target_pos)
         move_player_left(c);    
     }
     if (IsKeyDown(KEY_D)) {
-        if (c->pos.z < target_pos - 0.4f)
+        if (c->pos.z < target_pos)
         move_player_right(c);
     }
 }
@@ -140,10 +130,6 @@ struct cube create_obstacle(struct cube player) {
             random_z
         },
         .color = colors[GetRandomValue(0, AVAILABLE_COLORS)],
-        .hitbox = (BoundingBox) {
-            (Vector3) {obst_x_pos - 0.5f, -0.25f, random_z - 0.5f},
-            (Vector3) {obst_x_pos + 0.5f, 0.75f, random_z + (z_size / 2)}
-        },
         .collided = false
     };
 }
