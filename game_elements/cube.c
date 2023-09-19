@@ -81,8 +81,6 @@ void player_move(struct cube* c) {
     c->pos.x += SPEED * GetFrameTime();
 
     float target_pos = (TERRAIN_WIDTH / 2) - c->size.z;
-    // TODO: find a way to fix the boundaries control and not use
-    // hard-coded random values
     if (IsKeyDown(KEY_A)) {
         if (c->pos.z > -target_pos)
         move_player_left(c);    
