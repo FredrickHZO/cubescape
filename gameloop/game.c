@@ -29,40 +29,32 @@ static inline void render_3D_scene(struct game* g) {
     EndMode3D();
 }
 
+BoundingBox get_bb(struct cube c) {
+    return (BoundingBox){
+        (Vector3) {
+            c.pos.x - c.size.x / 2,
+            c.pos.y - c.size.y / 2,
+            c.pos.z - c.size.z / 2,
+        },
+        (Vector3) {
+            c.pos.x + c.size.x / 2,
+            c.pos.y + c.size.y / 2,
+            c.pos.z + c.size.z / 2,
+        },
+    };
+} 
+
 static inline void check_collisions(struct game* g) {
         if (g->obstacles.elements == 0) {
             return;
         }
 
-        if (CheckCollisionBoxes(
-            (BoundingBox){
-                (Vector3) {
-                g->player.pos.x - g->player.size.x / 2,
-                g->player.pos.y - g->player.size.y / 2,
-                g->player.pos.z - g->player.size.z / 2,
-                },
-                (Vector3) {
-                g->player.pos.x + g->player.size.x / 2,
-                g->player.pos.y + g->player.size.y / 2,
-                g->player.pos.z + g->player.size.z / 2,
-                },
-            },
-            (BoundingBox) {
-                (Vector3) {
-                g->obstacles.arr[0].pos.x - g->obstacles.arr[0].size.x / 2,
-                g->obstacles.arr[0].pos.y - g->obstacles.arr[0].size.y / 2,
-                g->obstacles.arr[0].pos.z - g->obstacles.arr[0].size.z / 2,
-                },
-                (Vector3) {
-                g->obstacles.arr[0].pos.x + g->obstacles.arr[0].size.x / 2,
-                g->obstacles.arr[0].pos.y + g->obstacles.arr[0].size.y / 2,
-                g->obstacles.arr[0].pos.z + g->obstacles.arr[0].size.z / 2,
-                }
-            }
-        ) && g->obstacles.arr[0].collided == false) {
-            g->obstacles.arr[0].color = BLACK;
-            g->obstacles.arr[0].collided = true;
-            g->lives--;
+        if (CheckCollisionBoxes(get_bb(g->player),
+            get_bb(g->obstacles.arr[0])) && 
+            g->obstacles.arr[0].collided == false) {
+                g->obstacles.arr[0].color = BLACK;
+                g->obstacles.arr[0].collided = true;
+                g->lives--;
         }
 }
 
@@ -83,6 +75,25 @@ static inline void reset_game(struct game* g) {
     g->lives = 3;
 }
 
+static inline void draw_retry_screen(struct game* g, int cycles) {
+    DrawText("Press R to try again", 20, 20, 20, BLACK);
+    if (IsKeyDown(KEY_R)) {
+        reset_game(g);
+        cycles = 0;
+    }
+}
+
+static inline void draw_ui(struct game* g, int cycles) {
+    if (g->lives > 0)
+        DrawText(
+            TextFormat("LIVES := %d", g->lives), 
+            20, 20, 20, BLACK
+        );
+    else {
+        draw_retry_screen(g, cycles);
+    }
+}
+
 void run(struct game* g) {
     for (int cycles = 0; !WindowShouldClose(); cycles++) {
         // update game values
@@ -90,21 +101,12 @@ void run(struct game* g) {
             update_game_state(g);
             manage_obstacles(g, cycles);
         }
-
         check_collisions(g);
 
         // draw on the screen
         BeginDrawing();
             ClearBackground(BEIGE);
-            if (g->lives > 0)
-                DrawText(TextFormat("LIVES := %d", g->lives), 20, 20, 20, BLACK);
-            else {
-                DrawText("Press R to try again", 20, 20, 20, BLACK);
-                if (IsKeyDown(KEY_R)) {
-                    reset_game(g);
-                    cycles = 0;
-                }
-            }
+            draw_ui(g, cycles);
             render_3D_scene(g);
         EndDrawing();
     }
