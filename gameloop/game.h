@@ -5,10 +5,10 @@
 
 struct game {
     struct cube player;
-    Camera3D camera;
     struct cube obstacle;
-    list obstacles;
     struct cube terrain;
+    Camera3D camera;
+    list obstacles;
     int lives;
     float points;
 };

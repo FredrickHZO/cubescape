@@ -8,8 +8,8 @@ const float P_SIZE        = 0.5f;
 const float DIST_FROM_PLAYER = 100.0f;
 const float DESPAWN_DIST     = 1.5f;
 const int SPAWN_CYCLES       = 30;
-const float MIN_SIZE           = 1;
-const float MAX_SIZE           = 3.5;
+const float MIN_SIZE         = 1;
+const float MAX_SIZE         = 3.5;
 
 const float TERRAIN_ELEVATION = -0.25f;
 const float TERRAIN_LENGTH    = 900.0f;
@@ -27,9 +27,9 @@ const Color colors[] = {
 // terrain related code
 struct cube init_plane() {
     return (struct cube) {
-        .pos  = (Vector3){0, TERRAIN_ELEVATION, 0},
-        .size = (Vector3){TERRAIN_LENGTH, 0.1f, TERRAIN_WIDTH},
-        .color  = RED
+        .pos   = (Vector3){0, TERRAIN_ELEVATION, 0},
+        .size  = (Vector3){TERRAIN_LENGTH, 0.1f, TERRAIN_WIDTH},
+        .color = RED
     };
 }
 
@@ -53,9 +53,9 @@ void update_plane_position(struct cube player, struct cube* plane) {
 // player related code
 struct cube init_player() {
     return (struct cube) {
-        .pos  = (Vector3){0, TERRAIN_ELEVATION + P_SIZE, 0},
-        .size = (Vector3){P_SIZE, P_SIZE, P_SIZE},
-        .color  = YELLOW
+        .pos   = (Vector3){0, TERRAIN_ELEVATION + P_SIZE, 0},
+        .size  = (Vector3){P_SIZE, P_SIZE, P_SIZE},
+        .color = YELLOW
     };
 }
 

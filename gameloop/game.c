@@ -7,14 +7,14 @@ struct game new_game() {
         .camera    = init_follow_camera(),
         .terrain   = init_plane(),
         .obstacles = new_list(),
-        .lives = 3
+        .lives     = 3
     };
 }
 
 static inline void update_game_state(struct game* g) {
-        player_move(&g->player);
-        follow_player_cam(&g->camera, g->player);
-        update_plane_position(g->player, &g->terrain);
+    player_move(&g->player);
+    follow_player_cam(&g->camera, g->player);
+    update_plane_position(g->player, &g->terrain);
 }
 
 static inline void render_3D_scene(struct game* g) {
@@ -59,9 +59,9 @@ static inline void manage_obstacles(struct game* g, int cycles) {
 static inline void reset_game(struct game* g) {
     g->player    = init_player();
     g->camera    = init_follow_camera();
-    reset_list(&g->obstacles);
     g->terrain   = init_plane();
     g->lives     = 3;
+    reset_list(&g->obstacles);
 }
 
 static inline void draw_retry_screen(struct game* g) {
@@ -73,10 +73,8 @@ static inline void draw_retry_screen(struct game* g) {
 
 static inline void draw_ui(struct game* g) {
     if (g->lives > 0)
-        DrawText(
-            TextFormat("LIVES := %d", g->lives), 
-            20, 20, 20, BLACK
-        );
+        DrawText(TextFormat("LIVES := %d", g->lives), 
+            20, 20, 20, BLACK);
     else {
         draw_retry_screen(g);
     }
@@ -89,7 +87,9 @@ void run(struct game* g) {
             update_game_state(g);
             manage_obstacles(g, cycles);
         }
-        if (check_collisions(g)) manage_collision(g);
+        if (check_collisions(g)) {
+            manage_collision(g);
+        }
 
         // draw on the screen
         BeginDrawing();
