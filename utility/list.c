@@ -23,6 +23,7 @@ void list_double(list* a) {
     for (int i = 0; i < a->elements; i++) {
        tmp[i] = a->arr[i];
     }
+    free(a->arr);
     a->arr = tmp; 
 }
 
