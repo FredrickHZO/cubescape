@@ -9,6 +9,13 @@ list new_list() {
     return l;
 }
 
+void reset_list(list* l) {
+    free(l->arr);
+    l->elements = 0;
+    l->size     = 10;
+    l->arr = (struct cube*) malloc(sizeof(struct cube) * l->size);
+}
+
 void list_double(list* a) {
     struct cube* tmp;
     a->size *= 2;

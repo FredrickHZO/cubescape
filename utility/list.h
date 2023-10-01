@@ -9,5 +9,6 @@ typedef struct list {
 } list;
 
 list new_list();
+void reset_list(list* l);
 void insert_element(list* a, struct cube c);
 void delete_element(list* l);
