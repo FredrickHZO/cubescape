@@ -108,6 +108,21 @@ int should_obst_despawn(struct cube player, struct cube enemy) {
     return false;
 }
 
+BoundingBox get_bb(struct cube c) {
+    return (BoundingBox){
+        (Vector3) {
+            c.pos.x - c.size.x / 2,
+            c.pos.y - c.size.y / 2,
+            c.pos.z - c.size.z / 2,
+        },
+        (Vector3) {
+            c.pos.x + c.size.x / 2,
+            c.pos.y + c.size.y / 2,
+            c.pos.z + c.size.z / 2,
+        },
+    };
+} 
+
 
 // spawn an enemy with a random position and size
 struct cube create_obstacle(struct cube player) {

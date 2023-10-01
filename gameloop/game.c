@@ -29,33 +29,22 @@ static inline void render_3D_scene(struct game* g) {
     EndMode3D();
 }
 
-BoundingBox get_bb(struct cube c) {
-    return (BoundingBox){
-        (Vector3) {
-            c.pos.x - c.size.x / 2,
-            c.pos.y - c.size.y / 2,
-            c.pos.z - c.size.z / 2,
-        },
-        (Vector3) {
-            c.pos.x + c.size.x / 2,
-            c.pos.y + c.size.y / 2,
-            c.pos.z + c.size.z / 2,
-        },
-    };
-} 
-
-static inline void check_collisions(struct game* g) {
+static inline bool check_collisions(struct game* g) {
         if (g->obstacles.elements == 0) {
-            return;
+            return false;
         }
-
         if (CheckCollisionBoxes(get_bb(g->player),
             get_bb(g->obstacles.arr[0])) && 
             g->obstacles.arr[0].collided == false) {
-                g->obstacles.arr[0].color = BLACK;
-                g->obstacles.arr[0].collided = true;
-                g->lives--;
+                return true;
         }
+        return false;
+}
+
+static inline void manage_collision(struct game* g) {
+    g->obstacles.arr[0].color    = BLACK;
+    g->obstacles.arr[0].collided = true;
+    g->lives--;
 }
 
 static inline void manage_obstacles(struct game* g, int cycles) {
@@ -68,29 +57,28 @@ static inline void manage_obstacles(struct game* g, int cycles) {
 }
 
 static inline void reset_game(struct game* g) {
-    g->player = init_player();
-    g->camera = init_follow_camera();
-    g->obstacles = new_list();
-    g->terrain = init_plane();
-    g->lives = 3;
+    g->player    = init_player();
+    g->camera    = init_follow_camera();
+    reset_list(&g->obstacles);
+    g->terrain   = init_plane();
+    g->lives     = 3;
 }
 
-static inline void draw_retry_screen(struct game* g, int cycles) {
+static inline void draw_retry_screen(struct game* g) {
     DrawText("Press R to try again", 20, 20, 20, BLACK);
     if (IsKeyDown(KEY_R)) {
         reset_game(g);
-        cycles = 0;
     }
 }
 
-static inline void draw_ui(struct game* g, int cycles) {
+static inline void draw_ui(struct game* g) {
     if (g->lives > 0)
         DrawText(
             TextFormat("LIVES := %d", g->lives), 
             20, 20, 20, BLACK
         );
     else {
-        draw_retry_screen(g, cycles);
+        draw_retry_screen(g);
     }
 }
 
@@ -101,12 +89,12 @@ void run(struct game* g) {
             update_game_state(g);
             manage_obstacles(g, cycles);
         }
-        check_collisions(g);
+        if (check_collisions(g)) manage_collision(g);
 
         // draw on the screen
         BeginDrawing();
             ClearBackground(BEIGE);
-            draw_ui(g, cycles);
+            draw_ui(g);
             render_3D_scene(g);
         EndDrawing();
     }

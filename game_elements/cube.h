@@ -17,3 +17,4 @@ void draw_cube(struct cube c);
 void player_move(struct cube* c);
 int should_obst_spawn(struct cube player, int cycles);
 int should_obst_despawn(struct cube player, struct cube enemy);
+BoundingBox get_bb(struct cube c);
