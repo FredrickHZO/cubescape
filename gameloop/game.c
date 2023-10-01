@@ -1,5 +1,4 @@
 #include "game.h"
-#include "raymath.h"
 
 struct game new_game() {
     return (struct game) {
@@ -86,9 +85,9 @@ void run(struct game* g) {
         if (g->lives > 0) {
             update_game_state(g);
             manage_obstacles(g, cycles);
-        }
-        if (check_collisions(g)) {
-            manage_collision(g);
+            if (check_collisions(g)) {
+                manage_collision(g);
+            }
         }
 
         // draw on the screen
